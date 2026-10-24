@@ -2,6 +2,7 @@
 
 This repo contains a Spring Boot app (from the Spring "Getting Started" guide, the `complete` directory) that I containerized, optimized, and deployed on an Ubuntu VM. The VM setup is automated with Vagrant.
 
+GitHub repo: https://github.com/iremsert/devops-case-study
 Docker Hub image: https://hub.docker.com/r/iremsert/spring-boot-case-study
 
 ## Architecture Overview
