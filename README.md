@@ -4,7 +4,7 @@ This repo contains a Spring Boot app (from the Spring "Getting Started" guide, t
 
 Docker Hub image: https://hub.docker.com/r/iremsert/spring-boot-case-study
 
-## Overview
+## Architecture Overview
 
 ```
 Windows host
