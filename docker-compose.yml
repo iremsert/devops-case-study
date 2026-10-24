@@ -1,6 +1,13 @@
 services:
   app:
-    image: iremsert/spring-boot-case-study:v1
+    image: iremsert/spring-boot-case-study:latest
     ports:
       - "8080:8080"
     restart: unless-stopped
+
+  watchtower:
+    image: nickfedor/watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 60
