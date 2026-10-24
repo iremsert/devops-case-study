@@ -119,7 +119,7 @@ vagrant destroy    # delete the VM
 
 **GitHub Actions.** The workflow is in `.github/workflows/ci-cd.yml`. It runs when I push to `main` and one of these changed: `src/`, `pom.xml` or `Dockerfile`. It logs in to Docker Hub, builds the multi-stage image and pushes it with two tags: `latest` and the git commit SHA. The Docker Hub login uses two GitHub Actions secrets: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (a Docker Hub access token with read/write permission, not my password).
 
-**Watchtower.** `docker-compose.yml` now has a second service, Watchtower. It has access to the Docker socket and checks Docker Hub every 60 seconds. The `app` service uses the `latest` tag, so when the pipeline pushes a new `latest`, Watchtower pulls it and recreates the app container. I used the `nickfedor/watchtower` image, a maintained fork.
+**Watchtower.** `docker-compose.yml` now has a second service, Watchtower. It has access to the Docker socket and checks Docker Hub every 60 seconds. The `app` service uses the `latest` tag, so when the pipeline pushes a new `latest`, Watchtower pulls it and recreates the app container. I used the `nickfedor/watchtower` image.
 
 **How I tested it.** I changed the text in `HelloController.java` to "Greetings from Spring Boot! Deployed with CI/CD" and pushed. The pipeline ran and passed, and a few minutes later Watchtower logged `Found new image` for the app container. After that, http://localhost:8080 in the browser showed the new text without me touching the VM.
 
@@ -150,7 +150,7 @@ The image is about 69% smaller. The final image does not need Maven, the JDK or 
 
 ## Problems I ran into
 
-- **Docker pull was very slow inside my first VM.** The `docker compose up` kept waiting on the layers. The network itself was fine (`curl` to the registry worked), so I exported the image on Windows with `docker save`, copied it into the VM with `scp` and loaded it with `docker load`. Later, the Vagrant VM pulled the same image from Docker Hub without any problem.
+- **Docker pull was very slow inside my first VM.** The `docker compose up` kept waiting on the layers. The network itself was fine, so I exported the image on Windows with `docker save`, copied it into the VM with `scp` and loaded it with `docker load`. Later, the Vagrant VM pulled the same image from Docker Hub without any problem.
 - **The first Vagrant box was not usable.** `alvistack/ubuntu-26.04` is not published for VirtualBox, and `bento/ubuntu-26.04` did not boot on my machine (SSH timeout). I switched to `cloud-image/ubuntu-26.04`, which supports VirtualBox and worked.
 - **Watchtower warnings in the logs.** Watchtower prints `Digest retrieval failed, falling back to full pull` for each container. It is only a warning: it then pulls the image to compare it, and the update still works (`failed=0`).
 - **WSL install was blocked on my PC.** The installer asked for a developer license, I fixed it by running PowerShell as administrator and enabling the Windows features with DISM before installing Ubuntu.
