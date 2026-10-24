@@ -1,0 +1,6 @@
+services:
+  app:
+    image: iremsert/spring-boot-case-study:v1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
