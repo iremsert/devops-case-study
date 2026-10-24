@@ -72,6 +72,8 @@ The flow is simple: build the image on my machine, push it to Docker Hub, and th
    docker tag spring-boot-case-study:v1 iremsert/spring-boot-case-study:v1
    docker push iremsert/spring-boot-case-study:v1
    ```
+   
+   ![Docker Hub tags](screenshots/3-docker-hub-tags.jpg)
 
 ### Phase 2: Manual VM deployment
 
@@ -92,6 +94,8 @@ The flow is simple: build the image on my machine, push it to Docker Hub, and th
    ```
 
 6. Open http://localhost:8080 on the host to check it.
+
+![Docker on the VM](screenshots/4-vm-docker.png)
 
 ### Phase 3: Vagrant
 
@@ -119,6 +123,10 @@ vagrant destroy    # delete the VM
 
 **How I tested it.** I changed the text in `HelloController.java` to "Greetings from Spring Boot! Deployed with CI/CD" and pushed. The pipeline ran and passed, and a few minutes later Watchtower logged `Found new image` for the app container. After that, http://localhost:8080 in the browser showed the new text without me touching the VM.
 
+![GitHub Actions runs](screenshots/5-github-actions.jpg)
+
+![App after the CI/CD update](screenshots/6-browser-ci-cd.jpg)
+
 To see what Watchtower did:
 
 ```
@@ -135,6 +143,8 @@ The `app` container shows a recent creation time, the `watchtower` container is 
 |---------|-----------------|-----------|--------------|
 | `basic` (before) | Single stage, Maven + full JDK + source code in the final image | 947 MB | 312 MB |
 | `v1` (after) | Multi-stage, only the JRE and the jar in the final image, runs as non-root user | 298 MB | 87.8 MB |
+
+![Image sizes](screenshots/2-docker-images.png)
 
 The image is about 69% smaller. The final image does not need Maven, the JDK or the source code. It only needs the jar and a Java runtime.
 
